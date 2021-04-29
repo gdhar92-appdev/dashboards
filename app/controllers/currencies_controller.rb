@@ -20,4 +20,15 @@ class CurrenciesController < ApplicationController
 
   end
 
+  def third_currency
+    @org_currency = params.fetch("from_currency")
+    @conv_currency = params.fetch("to_currency")
+    @raw_data = open("https://api.exchangerate.host/convert?from=" + @org_currency.to_s + "&to=" + @conv_currency.to_s).read
+    @parsed_data = JSON.parse(@raw_data)
+    @rate = @parsed_data.fetch("info").fetch("rate")
+
+    render({ :template => "currency_templates/step_three.html.erb"})
+
+  end
+
 end
